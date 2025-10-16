@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Deer Antler Velvet Traceability</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f9f7f2;
+      color: #333;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #4a7c59;
+      padding-bottom: 15px;
+    }
+    h1 {
+      color: #2e5939;
+      font-size: 24px;
+      margin: 0;
+    }
+    .section {
+      background: white;
+      padding: 18px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .section h2 {
+      margin-top: 0;
+      color: #4a7c59;
+      font-size: 18px;
+    }
+    .images {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .images img {
+      width: calc(50% - 4px);
+      border-radius: 6px;
+      object-fit: cover;
+      height: 120px;
+    }
+    .footer {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+    .verified {
+      font-weight: bold;
+      color: #2e5939;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1 id="page-title">Deer Antler Velvet – Traceability Record</h1>
+    </header>
+
+    <div class="section">
+      <h2 id="farm-section-title">🏞️ Origin Farm</h2>
+      <p><strong id="farm-name-label">Name:</strong> <span id="farm-name">—</span></p>
+      <p><strong id="farm-location-label">Location:</strong> <span id="farm-location">—</span></p>
+      <div class="images" id="farm-images">
+        <!-- Images will be inserted here -->
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 id="supply-section-title">📦 Supply Chain</h2>
+      <p><strong id="exporter-label">Exporter (Russia):</strong> <span id="exporter">—</span></p>
+      <p><strong id="importer-label">Importer (Korea):</strong> <strong>Siberian Antler Farms</strong></p>
+      <p><strong id="harvest-year-label">Harvest Year:</strong> <span id="harvest-year">—</span></p>
+    </div>
+
+    <div class="section">
+      <h2 id="vet-section-title">🩺 Veterinary Declaration</h2>
+      <p id="vet-certified">✅ <strong>Certified Safe for Export</strong></p>
+      <p><strong id="vet-issued-label">Issued by:</strong> <span id="vet-authority">—</span></p>
+      <p><strong id="vet-date-label">Date:</strong> <span id="vet-date">—</span></p>
+    </div>
+
+    <div class="footer">
+      <p class="verified" id="verified-by">Verified by Siberian Antler Farms</p>
+      <p id="tagline">Authentic Russian deer antler velvet — traceable from farm to Korea.</p>
+      <p><em id="scan-note">Scan this QR code anytime to verify authenticity.</em></p>
+    </div>
+  </div>
+
+  <script>
+    // Detect user language
+    const userLang = (navigator.language || navigator.userLanguage).toLowerCase();
+    const isKorean = userLang.startsWith('ko');
+
+    // Translation object
+    const translations = {
+      en: {
+        pageTitle: "Deer Antler Velvet – Traceability Record",
+        farmSection: "🏞️ Origin Farm",
+        farmName: "Name:",
+        farmLocation: "Location:",
+        supplySection: "📦 Supply Chain",
+        exporter: "Exporter (Russia):",
+        importer: "Importer (Korea):",
+        harvestYear: "Harvest Year:",
+        vetSection: "🩺 Veterinary Declaration",
+        vetCertified: "✅ Certified Safe for Export",
+        vetIssued: "Issued by:",
+        vetDate: "Date:",
+        verifiedBy: "Verified by Siberian Antler Farms",
+        tagline: "Authentic Russian deer antler velvet — traceable from farm to Korea.",
+        scanNote: "Scan this QR code anytime to verify authenticity."
+      },
+      ko: {
+        pageTitle: "사슴 봉황각 추적 기록",
+        farmSection: "🏞️ 원산지 농장",
+        farmName: "농장명:",
+        farmLocation: "위치:",
+        supplySection: "📦 공급망 정보",
+        exporter: "수출사 (러시아):",
+        importer: "수입사 (한국):",
+        harvestYear: "채취 연도:",
+        vetSection: "🩺 수의사 검역 증명서",
+        vetCertified: "✅ 수출용으로 검역 완료",
+        vetIssued: "발급 기관:",
+        vetDate: "발급 일자:",
+        verifiedBy: "시베리안 앤틀러 팜즈(Siberian Antler Farms) 인증",
+        tagline: "러시아산 순수 사슴 봉황각 — 농장에서 한국까지 완전 추적 가능.",
+        scanNote: "이 QR 코드를 스캔하여 언제든지 진위를 확인하세요."
+      }
+    };
+
+    // Apply translation
+    const t = isKorean ? translations.ko : translations.en;
+    document.getElementById('page-title').textContent = t.pageTitle;
+    document.getElementById('farm-section-title').textContent = t.farmSection;
+    document.getElementById('farm-name-label').textContent = t.farmName;
+    document.getElementById('farm-location-label').textContent = t.farmLocation;
+    document.getElementById('supply-section-title').textContent = t.supplySection;
+    document.getElementById('exporter-label').textContent = t.exporter;
+    document.getElementById('importer-label').textContent = t.importer;
+    document.getElementById('harvest-year-label').textContent = t.harvestYear;
+    document.getElementById('vet-section-title').textContent = t.vetSection;
+    document.getElementById('vet-certified').innerHTML = t.vetCertified;
+    document.getElementById('vet-issued-label').textContent = t.vetIssued;
+    document.getElementById('vet-date-label').textContent = t.vetDate;
+    document.getElementById('verified-by').textContent = t.verifiedBy;
+    document.getElementById('tagline').textContent = t.tagline;
+    document.getElementById('scan-note').textContent = t.scanNote;
+
+    // URL parameter parser
+    function getUrlParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name) || '—';
+    }
+
+    // Display dynamic data (supports Korean text via URL encoding)
+    document.getElementById('farm-name').textContent = decodeURIComponent(getUrlParam('farm') || '—');
+    document.getElementById('farm-location').textContent = decodeURIComponent(getUrlParam('location') || '—');
+    document.getElementById('exporter').textContent = decodeURIComponent(getUrlParam('exporter') || '—');
+    document.getElementById('harvest-year').textContent = getUrlParam('year') || '—';
+    document.getElementById('vet-authority').textContent = decodeURIComponent(getUrlParam('vet') || '—');
+    document.getElementById('vet-date').textContent = getUrlParam('vetdate') || '—';
+
+    // Load farm images
+    const imgUrls = getUrlParam('imgs');
+    const imgContainer = document.getElementById('farm-images');
+    if (imgUrls && imgUrls !== '—') {
+      const urls = imgUrls.split(',').slice(0, 3);
+      imgContainer.innerHTML = '';
+      urls.forEach(url => {
+        const img = document.createElement('img');
+        img.src = url.trim();
+        img.alt = isKorean ? "농장 사진" : "Farm image";
+        imgContainer.appendChild(img);
+      });
+    }
+  </script>
+</body>
+</html>
