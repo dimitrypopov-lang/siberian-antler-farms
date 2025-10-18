@@ -101,7 +101,7 @@
       </div>
 
       <div class="images" id="farm-images">
-        <!-- Farm images will be inserted here -->
+        <!-- Farm images -->
       </div>
     </div>
 
@@ -118,7 +118,7 @@
       <p><strong id="vet-issued-label">Issued by:</strong> <span id="vet-authority">—</span></p>
       <p><strong id="vet-date-label">Date:</strong> <span id="vet-date">—</span></p>
       <div class="vet-cert" id="vet-cert-image">
-        <!-- Vet cert image will appear here -->
+        <!-- Vet cert -->
       </div>
     </div>
 
@@ -130,11 +130,9 @@
   </div>
 
   <script>
-    // Detect user language
     const userLang = (navigator.language || navigator.userLanguage).toLowerCase();
     const isKorean = userLang.startsWith('ko');
 
-    // Translation object
     const translations = {
       en: {
         pageTitle: "Deer Antler Velvet – Traceability Record",
@@ -178,7 +176,6 @@
       }
     };
 
-    // Apply translation
     const t = isKorean ? translations.ko : translations.en;
     document.getElementById('page-title').textContent = t.pageTitle;
     document.getElementById('farm-section-title').textContent = t.farmSection;
@@ -199,46 +196,68 @@
     document.getElementById('tagline').textContent = t.tagline;
     document.getElementById('scan-note').textContent = t.scanNote;
 
-    // URL parameter parser
-    function getUrlParam(name) {
+    // Safe URL parser — no decodeURIComponent for images
+    function getParam(name) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(name) || '—';
     }
 
-    // Display dynamic data
-    document.getElementById('farm-name').textContent = decodeURIComponent(getUrlParam('farm') || '—');
-    document.getElementById('farm-location').textContent = decodeURIComponent(getUrlParam('location') || '—');
-    document.getElementById('exporter').textContent = decodeURIComponent(getUrlParam('exporter') || '—');
-    document.getElementById('harvest-year').textContent = getUrlParam('year') || '—';
-    document.getElementById('vet-authority').textContent = decodeURIComponent(getUrlParam('vet') || '—');
-    document.getElementById('vet-date').textContent = getUrlParam('vetdate') || '—');
+    // Text fields (safe decode)
+    function safeText(val) {
+      if (val === '—') return val;
+      try {
+        return decodeURIComponent(val.replace(/\+/g, ' '));
+      } catch (e) {
+        return val;
+      }
+    }
 
-    // New: Farm metrics
-    document.getElementById('herd-size').textContent = getUrlParam('herd') !== '—' ? getUrlParam('herd') + (isKorean ? ' 마리' : ' deer') : '—';
-    document.getElementById('total-kg').textContent = getUrlParam('totalkg') !== '—' ? getUrlParam('totalkg') + ' kg' : '—';
-    document.getElementById('class-a').textContent = getUrlParam('classa') !== '—' ? getUrlParam('classa') + ' kg' : '—';
+    // Get values
+    const farm = safeText(getParam('farm'));
+    const loc = safeText(getParam('location'));
+    const exp = safeText(getParam('exporter'));
+    const year = getParam('year');
+    const vetAuth = safeText(getParam('vet'));
+    const vetDate = getParam('vetdate');
+    const herd = getParam('herd');
+    const totalkg = getParam('totalkg');
+    const classa = getParam('classa');
+    const imgs = getParam('imgs');
+    const vetimg = getParam('vetimg');
 
-    // Load farm images (up to 3)
-    const imgUrls = getUrlParam('imgs');
-    const imgContainer = document.getElementById('farm-images');
-    if (imgUrls && imgUrls !== '—') {
-      const urls = imgUrls.split(',').slice(0, 3);
-      imgContainer.innerHTML = '';
-      urls.forEach(url => {
-        const img = document.createElement('img');
-        img.src = url.trim();
-        img.alt = isKorean ? "농장 사진" : "Farm image";
-        imgContainer.appendChild(img);
+    // Update text
+    document.getElementById('farm-name').textContent = farm;
+    document.getElementById('farm-location').textContent = loc;
+    document.getElementById('exporter').textContent = exp;
+    document.getElementById('harvest-year').textContent = year;
+    document.getElementById('vet-authority').textContent = vetAuth;
+    document.getElementById('vet-date').textContent = vetDate;
+
+    // Metrics
+    document.getElementById('herd-size').textContent = herd !== '—' ? herd + (isKorean ? ' 마리' : ' deer') : '—';
+    document.getElementById('total-kg').textContent = totalkg !== '—' ? totalkg + ' kg' : '—';
+    document.getElementById('class-a').textContent = classa !== '—' ? classa + ' kg' : '—';
+
+    // Farm images — use raw URLs as-is
+    const farmImgContainer = document.getElementById('farm-images');
+    if (imgs && imgs !== '—') {
+      farmImgContainer.innerHTML = '';
+      imgs.split(',').slice(0, 3).forEach(url => {
+        if (url.trim()) {
+          const img = document.createElement('img');
+          img.src = url.trim();
+          img.alt = isKorean ? '농장 사진' : 'Farm image';
+          farmImgContainer.appendChild(img);
+        }
       });
     }
 
-    // Load vet certificate image
-    const vetImgUrl = getUrlParam('vetimg');
-    const vetImgContainer = document.getElementById('vet-cert-image');
-    if (vetImgUrl && vetImgUrl !== '—') {
-      vetImgContainer.innerHTML = `<img src="${vetImgUrl.trim()}" alt="${isKorean ? '검역 증명서' : 'Veterinary Certificate'}">`;
+    // Vet cert
+    const vetContainer = document.getElementById('vet-cert-image');
+    if (vetimg && vetimg !== '—') {
+      vetContainer.innerHTML = `<img src="${vetimg.trim()}" alt="${isKorean ? '검역 증명서' : 'Veterinary Certificate'}">`;
     } else {
-      vetImgContainer.innerHTML = '<p><em>' + (isKorean ? '증명서 이미지 없음' : 'No certificate image available.') + '</em></p>';
+      vetContainer.innerHTML = `<p><em>${isKorean ? '증명서 이미지 없음' : 'No certificate image available.'}</em></p>`;
     }
   </script>
 </body>
