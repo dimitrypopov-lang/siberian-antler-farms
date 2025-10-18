@@ -41,10 +41,17 @@
       color: #4a7c59;
       font-size: 18px;
     }
+    .farm-metrics {
+      margin-top: 12px;
+      font-size: 15px;
+    }
+    .farm-metrics p {
+      margin: 6px 0;
+    }
     .images {
       display: flex;
       gap: 8px;
-      margin-top: 10px;
+      margin-top: 12px;
       flex-wrap: wrap;
     }
     .images img {
@@ -52,6 +59,15 @@
       border-radius: 6px;
       object-fit: cover;
       height: 120px;
+    }
+    .vet-cert {
+      margin-top: 10px;
+      text-align: center;
+    }
+    .vet-cert img {
+      max-width: 100%;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
     .footer {
       text-align: center;
@@ -77,8 +93,15 @@
       <h2 id="farm-section-title">🏞️ Origin Farm</h2>
       <p><strong id="farm-name-label">Name:</strong> <span id="farm-name">—</span></p>
       <p><strong id="farm-location-label">Location:</strong> <span id="farm-location">—</span></p>
+
+      <div class="farm-metrics">
+        <p><strong id="herd-label">Herd Size:</strong> <span id="herd-size">—</span></p>
+        <p><strong id="totalkg-label">Total Velvet Harvested:</strong> <span id="total-kg">—</span></p>
+        <p><strong id="classa-label">Class A Velvet:</strong> <span id="class-a">—</span></p>
+      </div>
+
       <div class="images" id="farm-images">
-        <!-- Images will be inserted here -->
+        <!-- Farm images will be inserted here -->
       </div>
     </div>
 
@@ -94,6 +117,9 @@
       <p id="vet-certified">✅ <strong>Certified Safe for Export</strong></p>
       <p><strong id="vet-issued-label">Issued by:</strong> <span id="vet-authority">—</span></p>
       <p><strong id="vet-date-label">Date:</strong> <span id="vet-date">—</span></p>
+      <div class="vet-cert" id="vet-cert-image">
+        <!-- Vet cert image will appear here -->
+      </div>
     </div>
 
     <div class="footer">
@@ -115,6 +141,9 @@
         farmSection: "🏞️ Origin Farm",
         farmName: "Name:",
         farmLocation: "Location:",
+        herdSize: "Herd Size:",
+        totalVelvet: "Total Velvet Harvested:",
+        classAVelvet: "Class A Velvet:",
         supplySection: "📦 Supply Chain",
         exporter: "Exporter (Russia):",
         importer: "Importer (Korea):",
@@ -132,6 +161,9 @@
         farmSection: "🏞️ 원산지 농장",
         farmName: "농장명:",
         farmLocation: "위치:",
+        herdSize: "사육 두수:",
+        totalVelvet: "총 봉황각 수확량:",
+        classAVelvet: "A등급 봉황각:",
         supplySection: "📦 공급망 정보",
         exporter: "수출사 (러시아):",
         importer: "수입사 (한국):",
@@ -152,6 +184,9 @@
     document.getElementById('farm-section-title').textContent = t.farmSection;
     document.getElementById('farm-name-label').textContent = t.farmName;
     document.getElementById('farm-location-label').textContent = t.farmLocation;
+    document.getElementById('herd-label').textContent = t.herdSize;
+    document.getElementById('totalkg-label').textContent = t.totalVelvet;
+    document.getElementById('classa-label').textContent = t.classAVelvet;
     document.getElementById('supply-section-title').textContent = t.supplySection;
     document.getElementById('exporter-label').textContent = t.exporter;
     document.getElementById('importer-label').textContent = t.importer;
@@ -170,15 +205,20 @@
       return urlParams.get(name) || '—';
     }
 
-    // Display dynamic data (supports Korean text via URL encoding)
+    // Display dynamic data
     document.getElementById('farm-name').textContent = decodeURIComponent(getUrlParam('farm') || '—');
     document.getElementById('farm-location').textContent = decodeURIComponent(getUrlParam('location') || '—');
     document.getElementById('exporter').textContent = decodeURIComponent(getUrlParam('exporter') || '—');
     document.getElementById('harvest-year').textContent = getUrlParam('year') || '—';
     document.getElementById('vet-authority').textContent = decodeURIComponent(getUrlParam('vet') || '—');
-    document.getElementById('vet-date').textContent = getUrlParam('vetdate') || '—';
+    document.getElementById('vet-date').textContent = getUrlParam('vetdate') || '—');
 
-    // Load farm images
+    // New: Farm metrics
+    document.getElementById('herd-size').textContent = getUrlParam('herd') !== '—' ? getUrlParam('herd') + (isKorean ? ' 마리' : ' deer') : '—';
+    document.getElementById('total-kg').textContent = getUrlParam('totalkg') !== '—' ? getUrlParam('totalkg') + ' kg' : '—';
+    document.getElementById('class-a').textContent = getUrlParam('classa') !== '—' ? getUrlParam('classa') + ' kg' : '—';
+
+    // Load farm images (up to 3)
     const imgUrls = getUrlParam('imgs');
     const imgContainer = document.getElementById('farm-images');
     if (imgUrls && imgUrls !== '—') {
@@ -190,6 +230,15 @@
         img.alt = isKorean ? "농장 사진" : "Farm image";
         imgContainer.appendChild(img);
       });
+    }
+
+    // Load vet certificate image
+    const vetImgUrl = getUrlParam('vetimg');
+    const vetImgContainer = document.getElementById('vet-cert-image');
+    if (vetImgUrl && vetImgUrl !== '—') {
+      vetImgContainer.innerHTML = `<img src="${vetImgUrl.trim()}" alt="${isKorean ? '검역 증명서' : 'Veterinary Certificate'}">`;
+    } else {
+      vetImgContainer.innerHTML = '<p><em>' + (isKorean ? '증명서 이미지 없음' : 'No certificate image available.') + '</em></p>';
     }
   </script>
 </body>
